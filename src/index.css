@@ -1,0 +1,397 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --paper: 44 33% 95%;          /* 柔化纸底 #F6F2E7 附近 */
+    --ink: 0 0% 10%;
+    --yp-yellow: 48 100% 50%;     /* #FFD200 */
+    --yp-red: 5 75% 47%;          /* 视频1 红 */
+    --grid-line: 0 0% 78%;        /* 灰色划分线 */
+    --grid-strong: 0 0% 60%;
+  }
+  html, body, #root { height: 100%; }
+  body {
+    font-family: '寒蝉德黑体', 'ChillDIN', 'Bahnschrift', 'Microsoft YaHei', sans-serif;
+    color: hsl(var(--ink));
+    background: hsl(var(--paper));
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-en { font-family: 'Bahnschrift', 'DIN Condensed', 'Arial Narrow', sans-serif; }
+}
+
+/* —— 全站仅保留 20px 细分网格，不再叠加 100px 大网格 —— */
+.blueprint-grid {
+  background-color: hsl(var(--paper));
+  background-image:
+    linear-gradient(to right, hsl(var(--grid-line) / 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--grid-line) / 0.35) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.dark-grid {
+  background-color: #131313;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.yellow-grid {
+  background-color: #f3e3a1;
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+.light-grid {
+  background-color: #efeeeb;
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.07) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* 首页卡片以 20px 为模数：200×320，卡片四周及相互之间均留一格。 */
+.archive-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px);
+  align-items: start;
+  gap: 20px;
+  padding: 20px;
+}
+@media (max-width: 419px) {
+  .archive-card-grid { grid-template-columns: repeat(auto-fill, 160px); }
+}
+
+/* —— 档案图片滤镜已离线烘焙进图片本体（grayscale/contrast/brightness），此处不再叠加 CSS filter —— */
+.yp-img { /* no-op: baked */ }
+
+/* —— 锚点圆点 —— */
+.anchor-dot {
+  width: 9px; height: 9px; border-radius: 9999px;
+  background: hsl(var(--yp-red));
+  position: absolute; z-index: 20;
+}
+
+/* —— 视频1式 大字号英文标题 —— */
+.mega-type {
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-weight: 700; line-height: 0.86; letter-spacing: -0.02em;
+}
+/* 首页标题字号可响应变化，但每一个行盒都严格落在 20px 基线上。 */
+.archive-mega-title { font-size: 48px; line-height: 60px; }
+@media (min-width: 768px) {
+  .archive-mega-title { font-size: 80px; line-height: 100px; }
+}
+@media (min-width: 1280px) {
+  .archive-mega-title { font-size: 120px; line-height: 140px; }
+}
+@media (min-width: 1536px) {
+  .archive-mega-title { font-size: 160px; line-height: 180px; }
+}
+
+/* 隐藏系统光标（自定义光标区域） */
+.no-cursor, .no-cursor * { cursor: none !important; }
+
+/* 词条浮签 */
+.tag-float {
+  font-size: 11px; line-height: 1;
+  padding: 5px 8px;
+  background: #fff;
+  border: 1px solid hsl(var(--ink));
+  white-space: nowrap;
+}
+.tag-float b { color: hsl(var(--yp-red)); font-weight: 600; }
+
+/* 文字-only 小格（全选结果中未抽中的黄页） */
+.text-cell {
+  border: 1px solid hsl(var(--grid-line));
+  font-size: 10px; line-height: 1.35;
+  padding: 6px; color: hsl(var(--ink) / 0.75);
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 0; height: 0; }
+
+/* ———————— 开场页（复刻参考站 Entry） ———————— */
+.font-type {
+  font-family: 'Bahnschrift', 'DIN Alternate', 'Franklin Gothic Medium', 'Arial Narrow', '寒蝉德黑体', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.yp-caret {
+  display: inline-block;
+  width: 0.55em; height: 1em;
+  margin-left: 2px;
+  background: #121212;
+  vertical-align: -0.12em;
+  animation: yp-blink 0.9s steps(2) infinite;
+}
+@keyframes yp-blink { 0%, to { opacity: 1 } 50% { opacity: 0.25 } }
+.yp-aged-paper {
+  background-color: #f2efe6;
+  background-image: radial-gradient(rgba(18, 18, 18, 0.045) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+@keyframes yp-stamp {
+  0% { transform: scale(1.6) rotate(-8deg); opacity: 0 }
+  60% { transform: scale(0.95) rotate(1deg); opacity: 1 }
+  to { transform: scale(1) rotate(0); opacity: 1 }
+}
+.yp-stamp { animation: yp-stamp 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+@keyframes yp-ripple {
+  0% { transform: translate(-50%, -50%) scale(0.15); opacity: 0.9 }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 0 }
+}
+.yp-ripple { animation: yp-ripple 1s ease-out forwards; }
+@keyframes yp-step {
+  0%, to { transform: translateY(0) rotate(-4deg) }
+  50% { transform: translateY(-6px) rotate(4deg) }
+}
+.yp-step { animation: yp-step 0.4s ease-in-out infinite; }
+.yp-page-out {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.995);
+  transition: opacity 0.38s ease, transform 0.38s ease;
+}
+
+/* ———————— ABOUT US / DERIVATIVES：20px 模数编辑网格 ———————— */
+.editorial-page {
+  padding: 40px 20px 100px;
+  font-family: '寒蝉德黑体', 'ChillDIN', 'Bahnschrift', 'Microsoft YaHei', sans-serif;
+}
+.editorial-page-label {
+  display: grid;
+  grid-template-columns: 180px 1fr auto;
+  align-items: center;
+  min-height: 40px;
+  border-top: 1px solid hsl(var(--ink) / 0.45);
+  border-bottom: 1px solid hsl(var(--ink) / 0.45);
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 11px;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+}
+.editorial-major-head {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: baseline;
+  min-height: 100px;
+  padding: 19px 0 20px;
+  border-bottom: 1px solid hsl(var(--ink));
+}
+.editorial-major-head > span,
+.editorial-group-head > span {
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.editorial-major-head h2 {
+  margin: 0;
+  font-size: 48px;
+  line-height: 60px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.editorial-major-head p,
+.editorial-group-head p {
+  margin: 0;
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+  text-align: right;
+}
+.editorial-group { padding-top: 20px; }
+.editorial-group-head {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: baseline;
+  min-height: 40px;
+  margin-bottom: 20px;
+}
+.editorial-group-head h3 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.editorial-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+.editorial-card {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid hsl(var(--ink) / 0.48);
+  border-radius: 0;
+  background: hsl(var(--paper));
+  color: hsl(var(--ink));
+  text-align: left;
+  box-shadow: none;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.editorial-card:hover { border-color: hsl(var(--ink)); background: #f7f4ec; }
+.editorial-card:focus-visible { outline: 2px solid #FFD200; outline-offset: 0; }
+.editorial-image-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.28);
+}
+.editorial-image-wrap > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.editorial-open {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 20px;
+  padding: 0 10px;
+  background: #FFD200;
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 10px;
+  line-height: 20px;
+  font-weight: 700;
+  opacity: 0;
+}
+.editorial-card:hover .editorial-open,
+.editorial-card:focus-visible .editorial-open { opacity: 1; }
+.editorial-card-meta {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  flex: 0 0 60px;
+  height: 60px;
+  border-top: 1px solid hsl(var(--ink) / 0.48);
+}
+.editorial-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid hsl(var(--ink) / 0.48);
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.editorial-name {
+  display: block;
+  min-width: 0;
+  padding: 10px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.editorial-name small {
+  display: block;
+  overflow: hidden;
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 9px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-overflow: ellipsis;
+}
+@media (min-width: 640px) {
+  .editorial-card.span-3,
+  .editorial-card.span-4,
+  .editorial-card.span-6 { grid-column: span 6; }
+  .editorial-card.span-12 { grid-column: span 12; }
+}
+@media (min-width: 1100px) {
+  .editorial-card.span-3 { grid-column: span 3; }
+  .editorial-card.span-4 { grid-column: span 4; }
+  .editorial-card.span-6 { grid-column: span 6; }
+}
+@media (hover: none) { .editorial-open { opacity: 1; } }
+@media (max-width: 767px) {
+  .editorial-page { padding-top: 20px; }
+  .editorial-page-label { grid-template-columns: 100px 1fr; }
+  .editorial-page-label > span:last-child { display: none; }
+  .editorial-major-head { grid-template-columns: 60px 1fr; }
+  .editorial-major-head h2 { font-size: 36px; line-height: 40px; }
+  .editorial-major-head p { display: none; }
+  .editorial-group-head { grid-template-columns: 60px 1fr; }
+  .editorial-group-head p { display: none; }
+}
+.editorial-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(var(--paper));
+}
+.editorial-lightbox > header {
+  display: flex;
+  flex: 0 0 60px;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding-left: 20px;
+  border-bottom: 1px solid hsl(var(--ink));
+  font-family: 'Bahnschrift', 'Arial Narrow', sans-serif;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.08em;
+}
+.editorial-lightbox > header button {
+  align-self: stretch;
+  min-width: 120px;
+  border-left: 1px solid hsl(var(--ink));
+  border-radius: 0;
+  background: #FFD200;
+  color: #111111;
+  font-weight: 700;
+}
+.editorial-lightbox-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 20px;
+}
+.editorial-lightbox-body img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: zoom-in;
+}
+.editorial-lightbox-body img.is-natural {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: initial;
+  cursor: zoom-out;
+}
+.editorial-lightbox > footer {
+  display: flex;
+  flex: 0 0 60px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 60px;
+  padding: 0 20px;
+  border-top: 1px solid hsl(var(--ink));
+  background: hsl(var(--paper));
+  font-size: 11px;
+  line-height: 20px;
+}
+.editorial-lightbox > footer strong { font-size: 16px; }
+.editorial-lightbox > footer span { text-align: right; }
